@@ -1,6 +1,6 @@
 #!/bin/bash
 #by nya
-source "./color_echo.sh"
+source "../color_echo/color_echo.sh"
 
 print_help(){
     echo -e "-i,\t指定音乐ID(必填).获取方法请自行搜索."
