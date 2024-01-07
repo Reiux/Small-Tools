@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 #By Nya
 #Begin at 2024-01-08 00:03
-#End at
+#End at 2024-01-08 00:50
 ###################
 # START OF SCRIPT #
 ###################
