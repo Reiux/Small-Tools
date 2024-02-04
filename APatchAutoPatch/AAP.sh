@@ -3,7 +3,7 @@
 #2024-02-04
 
 if [[ $(uname -o) == "Android" ]]; then
-	echo -e "${RED}E: RUN THIS SCRIPT IN ANDROID!"
+	echo -e "${RED}E: RUN THIS SCRIPT IN ANDROID!${RESET}"
 	exit 2
 fi
 
