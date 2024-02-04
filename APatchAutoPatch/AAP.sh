@@ -2,14 +2,14 @@
 #by nya
 #2024-02-04
 
-if [[ $(uname -o) == "Android" ]]; then
-	echo -e "${RED}E: RUN THIS SCRIPT IN ANDROID!${RESET}"
-	exit 2
-fi
-
 RED="\E[1;31m"
 YELLOW="\E[1;33m"
 RESET="\E[0m"
+
+if [[ "$(uname -o)" == "Android" ]]; then
+	echo -e "${RED}E: RUN THIS SCRIPT IN ANDROID!${RESET}"
+	exit 2
+fi
 
 BOOTSUFFIX=$(getprop ro.boot.slot_suffix)
 SUPERKEY=${RANDOM}
@@ -107,6 +107,9 @@ flash_boot() {
 		echo "${YELLOW}I: Restore Sucessfully.${RESET}"
 	fi
 	echo "I: Flash done."
+	echo "I: Cleaning temporary files..."
+	rm -rf ${WORKDIR}
+	echo "I: Done."
 }
 
 get_boot
