@@ -6,7 +6,7 @@ RED="\E[1;31m"
 YELLOW="\E[1;33m"
 RESET="\E[0m"
 
-if [[ "$(uname -o)" == "Android" ]]; then
+if [[ "$(uname -o)" != "Android" ]]; then
 	echo -e "${RED}E: RUN THIS SCRIPT IN ANDROID!${RESET}"
 	exit 2
 fi
