@@ -93,7 +93,7 @@ patch_boot() {
 }
 
 flash_boot() {
-	dd if=${WORKDIR}/patched_boot.img of=/dev/block/by-name/boot${BOOTSUFFIX}
+	dd if=${WORKDIR}/new-boot.img of=/dev/block/by-name/boot${BOOTSUFFIX}
 	EXITSTATUS=$?
 	if [[ ${EXITSTATUS} != 0 ]]; then
 		echo -e "${RED}E: WARNING!!! IMAGE FLASH FAILED${RESET}"
