@@ -59,7 +59,7 @@ get_device_boot() { # 未指定boot路径时从设备boot分区获取boot镜像
 get_tools() { # 从GitHub下载工具
 	cd ${WORKDIR}
 	echo "${BLUE}I: Downloading the latest kptools-android...${RESET}"
-	curl -LO "https://github.com/bmax121/KernelPatch/releases/latest/download/kptools-android"
+	curl -LO --progress-bar "https://github.com/bmax121/KernelPatch/releases/latest/download/kptools-android"
 	EXITSTATUS=$?
 	if [[ $EXITSTATUS != 0 ]]; then
 		echo -e "${RED}E: DOWNLOAD FAILED${RESET}"
@@ -69,7 +69,7 @@ get_tools() { # 从GitHub下载工具
 	chmod +x kptools-android
 	echo "${GREEN}I: Done.${RESET}"
 	echo "${BLUE}I: Downloading the latest kpimg-android...${RESET}"
-	curl -LO "https://github.com/bmax121/KernelPatch/releases/latest/download/kpimg-android"
+	curl -LO --progress-bar "https://github.com/bmax121/KernelPatch/releases/latest/download/kpimg-android"
 	EXITSTATUS=$?
 	if [[ $EXITSTATUS != 0 ]]; then
 		echo -e "${RED}E: DOWNLOAD FAILED${RESET}"
@@ -78,7 +78,7 @@ get_tools() { # 从GitHub下载工具
 	fi
 	echo "${GREEN}I: Done.${RESET}"
 	echo "${BLUE}I: Downloading magiskboot...${RESET}"
-	curl -LO "https://github.com/magojohnji/magiskboot-linux/raw/main/arm64-v8a/magiskboot"
+	curl -LO --progress-bar "https://github.com/magojohnji/magiskboot-linux/raw/main/arm64-v8a/magiskboot"
 	EXITSTATUS=$?
 	if [[ $EXITSTATUS != 0 ]]; then
 		echo -e "${RED}E: DOWNLOAD FAILED${RESET}"
