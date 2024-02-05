@@ -83,7 +83,7 @@ patch_boot() {
 	echo "I: Repacking..."
 	rm kernel
 	mv patchedkernel kernel || EXITSTATUS=1
-	magiskboot repack boot${BOOTSUFFIX} patched_boot || EXITSTATUS=1
+	./magiskboot repack boot${BOOTSUFFIX} patched_boot || EXITSTATUS=1
 	if [[ $EXITSTATUS != 0 ]]; then
 		echo -e "${RED}E: REPACK FAILED${RESET}"
 		exit 1
