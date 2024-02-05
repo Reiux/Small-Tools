@@ -13,6 +13,7 @@ if [[ "$(uname -o)" != "Android" ]]; then
 	echo -e "${RED}E: RUN THIS SCRIPT IN ANDROID!${RESET}"
 	exit 1
 fi
+# ROOT 检测
 if [[ "$(id -u)" != "0" ]]; then
 	echo -e "${RED}E: RUN THIS SCRIPT WITH ROOT PERMISSION!${RESET}"
 	exit 2
