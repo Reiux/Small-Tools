@@ -125,12 +125,12 @@ flash_boot() { # 刷入boot镜像
 			echo "I: Even I can't help you now. You can try to restore boot manually.${RESET}"
 			exit 1
 		fi
-		echo "${YELLOW}I: Restore Sucessfully.${RESET}"
+		echo -e "${YELLOW}I: Restore Sucessfully.${RESET}"
 	fi
-	echo "${GREEN}I: Flash done.${RESET}"
-	echo "${BLUE}I: Cleaning temporary files...${RESET}"
+	echo -e "${GREEN}I: Flash done.${RESET}"
+	echo -e "${BLUE}I: Cleaning temporary files...${RESET}"
 	rm -rf ${WORKDIR}
-	echo "${GREEN}I: Done.${RESET}"
+	echo -e "${GREEN}I: Done.${RESET}"
 	cat <<EOF
 ####################################
 
