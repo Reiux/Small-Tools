@@ -16,7 +16,6 @@ This script will:
 - Prepare
 
 ```bash
-tsu
 cd ${HOME}
 curl -LO https://github.com/nya-main/Small-Tools/raw/main/APatchAutoPatch/AAP.sh
 chmod +x AAP.sh
