@@ -18,12 +18,6 @@ fi
 SUPERKEY=${RANDOM}
 WORKDIR=/data/adb/nyatmp
 
-read -p "WARNING! USE THIS SCRIPT MAY BROKE YOUR PHONE!IF YOU REALLY WANT TO RUN THIS SCRIPT, ENTER ${SUPERKEY}: " INPUT
-if [[ "${INPUT}" != ${SUPERKEY} ]]; then
-	echo -e "${YELLOW}I: Exiting...${RESET}"
-	exit 0
-fi
-
 mkdir -p ${WORKDIR}
 cd ${WORKDIR}
 
@@ -89,7 +83,7 @@ patch_boot() {
 		exit 1
 	fi
 	echo "${GREEN}I: Done${RESET}"
-	echo "${GREEN}I: Repacking...${RESET}"
+	echo "${BLUE}I: Repacking...${RESET}"
 	rm kernel
 	mv patchedkernel kernel || EXITSTATUS=1
 	./magiskboot repack boot${BOOTSUFFIX}.img || EXITSTATUS=1
@@ -106,11 +100,11 @@ flash_boot() {
 	EXITSTATUS=$?
 	if [[ ${EXITSTATUS} != 0 ]]; then
 		echo -e "${RED}E: WARNING!!! IMAGE FLASH FAILED${RESET}"
-		echo -e "${YELLOW}I: Now restoring...${RESET}"
+		echo -e "${YELLOW}I: Now trying to restore...${RESET}"
 		dd if=${WORKDIR}/boot${BOOTSUFFIX}.img of=/dev/block/by-name/boot${BOOTSUFFIX}
 		EXITSTATUS=$?
 		if [[ ${EXITSTATUS} != 0 ]]; then
-			echo -e "${RED}E: WARNING!!! RESTORE FAILED"
+			echo -e "${RED}E: WARNING!!! RESTORE FAILED!!!"
 			echo "I: Even I can't help you now. You can try to restore boot manually.${RESET}"
 			exit 1
 		fi
