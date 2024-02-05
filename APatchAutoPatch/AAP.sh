@@ -8,34 +8,51 @@ BLUE="\E[1;34m"
 GREEN="\E[1;32m"
 RESET="\E[0m"
 
+# 判断是否为安卓
 if [[ "$(uname -o)" != "Android" ]]; then
 	echo -e "${RED}E: RUN THIS SCRIPT IN ANDROID!${RESET}"
 	exit 2
 fi
+# 判断用户输入的boot镜像路径是否正确
+if [[ -n ${1} ]]; then
+	BOOTPATH=$1
+	if [[ -e "${BOOTPATH}" ]]; then
+		echo -e "${BLUE}I: Boot image path specified. Current boot path: ${BOOTPATH}${RESET}"
+	else
+		echo -e "${RED}E: SPECIFIED BOOT IMAGE PATH IS WRONG! NO SUCH FILE!${RESET}"
+		exit 1
+	fi
+fi
+# 判断用户设备是否为ab分区，是则设置$BOOTSUFFIX
 if [[ ! -e /dev/block/by-name/boot ]]; then
 	BOOTSUFFIX=$(getprop ro.boot.slot_suffix)
 fi
+
 SUPERKEY=${RANDOM}
 WORKDIR=/data/adb/nyatmp
 
 mkdir -p ${WORKDIR}
 cd ${WORKDIR}
 
-get_boot() {
-	echo "${BLUE}I: Getting boot image...${RESET}"
-	echo "${BLUE}I: Current boot: ${BOOTSUFFIX}(If empty: A-Only devices)${RESET}"
-	dd if=/dev/block/by-name/boot${BOOTSUFFIX} of=${WORKDIR}/boot${BOOTSUFFIX}.img
-	EXITSTATUS=$?
-	if [[ $EXITSTATUS != 0 ]]; then
-		echo -e "${RED}E: GET BOOT IMAGE FAILED${RESET}"
-		echo -e "Maybe the boot path I prepared in advance is wrong. You can contact me through Telegram@nya_main"
-		exit 1
+get_device_boot() { # 未指定boot路径时从设备boot分区获取boot镜像
+	if [[ -z "${BOOTPATH}" ]]; then
+		echo "${BLUE}I: Getting boot image...${RESET}"
+		echo "${BLUE}I: Current boot: ${BOOTSUFFIX}(If empty: A-Only devices)${RESET}"
+		dd if=/dev/block/by-name/boot${BOOTSUFFIX} of=${WORKDIR}/boot${BOOTSUFFIX}.img
+		EXITSTATUS=$?
+		if [[ $EXITSTATUS != 0 ]]; then
+			echo -e "${RED}E: GET BOOT IMAGE FAILED${RESET}"
+			echo -e "Maybe the boot path I prepared in advance is wrong. "
+			exit 1
+		fi
+	else
+		cp ${BOOTPATH} ${WORKDIR}/boot.img
 	fi
 	echo "${GREEN}I: Done.${RESET}"
 }
 
-get_tools() {
-	echo "${BLUE}I: Downloading the latest kptool-android...${RESET}"
+get_tools() { # 从GitHub下载工具
+	echo "${BLUE}I: Downloading the latest kptools-android...${RESET}"
 	curl -LO "https://github.com/bmax121/KernelPatch/releases/latest/download/kptools-android"
 	EXITSTATUS=$?
 	if [[ $EXITSTATUS != 0 ]]; then
@@ -66,7 +83,7 @@ get_tools() {
 	echo "${GREEN}I: Done.${RESET}"
 }
 
-patch_boot() {
+patch_boot() { # 修补boot镜像
 	echo "${BLUE}I: Unpacking image...${RESET}"
 	./magiskboot unpack boot${BOOTSUFFIX}.img
 	EXITSTATUS=$?
@@ -94,7 +111,7 @@ patch_boot() {
 	echo "I: Done."
 }
 
-flash_boot() {
+flash_boot() { # 刷入boot镜像
 	echo -e "${BLUE}I: Flashing boot image...${RESET}"
 	dd if=${WORKDIR}/new-boot.img of=/dev/block/by-name/boot${BOOTSUFFIX}
 	EXITSTATUS=$?
@@ -127,7 +144,8 @@ flash_boot() {
 EOF
 }
 
-get_boot
+# 调用先前的函数
+get_device_boot
 get_tools
 patch_boot
 flash_boot

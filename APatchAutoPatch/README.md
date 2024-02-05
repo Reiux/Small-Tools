@@ -11,7 +11,7 @@ This script will:
 
 ## TODO
 
-- [ ] User-specified boot image path.
+- [x] User-specified boot image path.
 
 ---
 
