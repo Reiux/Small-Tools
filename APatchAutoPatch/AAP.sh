@@ -52,7 +52,7 @@ get_device_boot() { # 未指定boot路径时从设备boot分区获取boot镜像
 			exit 1
 		fi
 	else
-		cp ${BOOTPATH} ${WORKDIR}/boot.img
+		cp ${BOOTPATH} ${WORKDIR}/boot${BOOTSUFFIX}.img
 	fi
 	echo "${GREEN}I: Done.${RESET}"
 }
