@@ -34,7 +34,7 @@ tsu
 # Directly run
 ./AAP.sh 
 
-# Specify a boot **IMAGE** path (NOT BOOT PPARTITION PATH)
+# Specify a boot **IMAGE** path (NOT BOOT PARTITION PATH)
 ./AAP.sh /sdcard/Download/boot_a.img
 ```
 
