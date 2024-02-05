@@ -23,16 +23,19 @@ chmod +x AAP.sh
 
 *After this, You can directly run AAP.sh after command tsu is executed.*
 
-- Run with args
+- Run
 
 Example:
 
 ```bash
+# Before you run this script, grant root permission
+tsu
+
 # Directly run
-tsu; ./AAP.sh 
+./AAP.sh 
 
 # Specify a boot **IMAGE** path (NOT BOOT PPARTITION PATH)
-tsu; ./AAP.sh /sdcard/Download/boot_a.img
+./AAP.sh /sdcard/Download/boot_a.img
 ```
 
 ---
