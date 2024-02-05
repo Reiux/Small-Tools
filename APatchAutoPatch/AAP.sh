@@ -4,6 +4,8 @@
 
 RED="\E[1;31m"
 YELLOW="\E[1;33m"
+BLUE="\E[1;34m"
+GREEN="\E[1;32m"
 RESET="\E[0m"
 
 if [[ "$(uname -o)" != "Android" ]]; then
@@ -16,12 +18,18 @@ fi
 SUPERKEY=${RANDOM}
 WORKDIR=/data/adb/nyatmp
 
+read -p "WARNING! USE THIS SCRIPT MAY BROKE YOUR PHONE!IF YOU REALLY WANT TO RUN THIS SCRIPT, ENTER ${SUPERKEY}: " INPUT
+if [[ "${INPUT}" != ${SUPERKEY} ]]; then
+	echo -e "${YELLOW}I: Exiting...${RESET}"
+	exit 0
+fi
+
 mkdir -p ${WORKDIR}
 cd ${WORKDIR}
 
 get_boot() {
-	echo "I: While getting boot image..."
-	echo "I: Current boot: ${BOOTSUFFIX}(If empty: A-Only devices)"
+	echo "${BLUE}I: Getting boot image...${RESET}"
+	echo "${BLUE}I: Current boot: ${BOOTSUFFIX}(If empty: A-Only devices)${RESET}"
 	dd if=/dev/block/by-name/boot${BOOTSUFFIX} of=${WORKDIR}/boot${BOOTSUFFIX}.img
 	EXITSTATUS=$?
 	if [[ $EXITSTATUS != 0 ]]; then
@@ -29,11 +37,11 @@ get_boot() {
 		echo -e "Maybe the boot path I prepared in advance is wrong. You can contact me through Telegram@nya_main"
 		exit 1
 	fi
-	echo "I: Done."
+	echo "${GREEN}I: Done.${RESET}"
 }
 
 get_tools() {
-	echo "I: Downloading the latest kptool-android..."
+	echo "${BLUE}I: Downloading the latest kptool-android...${RESET}"
 	curl -LO "https://github.com/bmax121/KernelPatch/releases/latest/download/kptools-android"
 	EXITSTATUS=$?
 	if [[ $EXITSTATUS != 0 ]]; then
@@ -42,8 +50,8 @@ get_tools() {
 		exit 1
 	fi
 	chmod +x kptools-android
-	echo "I: Done."
-	echo "I: Downloading the latest kpimg-android..."
+	echo "${GREEN}I: Done.${RESET}"
+	echo "${BLUE}I: Downloading the latest kpimg-android...${RESET}"
 	curl -LO "https://github.com/bmax121/KernelPatch/releases/latest/download/kpimg-android"
 	EXITSTATUS=$?
 	if [[ $EXITSTATUS != 0 ]]; then
@@ -51,8 +59,8 @@ get_tools() {
 		echo "Please check your internet connection."
 		exit 1
 	fi
-	echo "I: Done."
-	echo "I: Downloading magiskboot..."
+	echo "${GREEN}I: Done.${RESET}"
+	echo "${BLUE}I: Downloading magiskboot...${RESET}"
 	curl -LO "https://github.com/magojohnji/magiskboot-linux/raw/main/arm64-v8a/magiskboot"
 	EXITSTATUS=$?
 	if [[ $EXITSTATUS != 0 ]]; then
@@ -61,27 +69,27 @@ get_tools() {
 		exit 1
 	fi
 	chmod +x magiskboot
-	echo "I: Done."
+	echo "${GREEN}I: Done.${RESET}"
 }
 
 patch_boot() {
-	echo "I: Unpacking image..."
+	echo "${BLUE}I: Unpacking image...${RESET}"
 	./magiskboot unpack boot${BOOTSUFFIX}.img
 	EXITSTATUS=$?
 	if [[ $EXITSTATUS != 0 ]]; then
 		echo -e "${RED}E: UNPACK BOOT IMAGE FAILED${RESET}"
 		exit 1
 	fi
-	echo "I: Done."
-	echo "I: Patching image...Current Superkey: ${SUPERKEY}"
+	echo "${GREEN}I: Done.${RESET}"
+	echo "${BLUE}I: Patching image...Current Superkey: ${SUPERKEY}${RESET}"
 	./kptools-android -p -k kpimg-android -s ${SUPERKEY} -i kernel -o patchedkernel
 	EXITSTATUS=$?
 	if [[ ${EXITSTATUS} != 0 ]]; then
 		echo -e "${RED}E: PATCH FAILED${RESET}"
 		exit 1
 	fi
-	echo "I: Done"
-	echo "I: Repacking..."
+	echo "${GREEN}I: Done${RESET}"
+	echo "${GREEN}I: Repacking...${RESET}"
 	rm kernel
 	mv patchedkernel kernel || EXITSTATUS=1
 	./magiskboot repack boot${BOOTSUFFIX}.img || EXITSTATUS=1
@@ -93,6 +101,7 @@ patch_boot() {
 }
 
 flash_boot() {
+	echo -e "${BLUE}I: Flashing boot image...${RESET}"
 	dd if=${WORKDIR}/new-boot.img of=/dev/block/by-name/boot${BOOTSUFFIX}
 	EXITSTATUS=$?
 	if [[ ${EXITSTATUS} != 0 ]]; then
@@ -107,20 +116,20 @@ flash_boot() {
 		fi
 		echo "${YELLOW}I: Restore Sucessfully.${RESET}"
 	fi
-	echo "I: Flash done."
-	echo "I: Cleaning temporary files..."
+	echo "${GREEN}I: Flash done.${RESET}"
+	echo "${BLUE}I: Cleaning temporary files...${RESET}"
 	rm -rf ${WORKDIR}
-	echo "I: Done."
+	echo "${GREEN}I: Done.${RESET}"
 	cat <<EOF
-    ####################################
-                                       
-                                       
-        YOUR SUPERKEY IS ${SUPERKEY}   
-                                       
-        DON'T FORGET IT!!              
-                                       
-                                       
-    ####################################
+####################################
+
+
+    YOUR SUPERKEY IS ${SUPERKEY}
+
+    DON'T FORGET IT!!
+
+
+####################################
 EOF
 }
 
