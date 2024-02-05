@@ -111,6 +111,17 @@ flash_boot() {
 	echo "I: Cleaning temporary files..."
 	rm -rf ${WORKDIR}
 	echo "I: Done."
+	cat <<EOF
+    ####################################
+    #                                  #
+    #                                  #
+    #   YOUR SUPERKEY IS ${SUPERKEY}   #
+    #                                  #
+    #   DON'T FORGET IT!!              #
+    #                                  #
+    #                                  #
+    ####################################
+EOF
 }
 
 get_boot
