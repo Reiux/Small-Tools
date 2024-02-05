@@ -13,6 +13,8 @@ This script will:
 
 - [ ] User-specified boot image path.
 
+---
+
 If you encounter any issues, please provide feedback to me:  
 
 [Telegram](https://t.me/nya_main)
