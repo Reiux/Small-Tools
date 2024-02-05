@@ -113,13 +113,13 @@ flash_boot() {
 	echo "I: Done."
 	cat <<EOF
     ####################################
-    #                                  #
-    #                                  #
-    #   YOUR SUPERKEY IS ${SUPERKEY}   #
-    #                                  #
-    #   DON'T FORGET IT!!              #
-    #                                  #
-    #                                  #
+                                       
+                                       
+        YOUR SUPERKEY IS ${SUPERKEY}   
+                                       
+        DON'T FORGET IT!!              
+                                       
+                                       
     ####################################
 EOF
 }
