@@ -35,8 +35,9 @@ mkdir -p ${WORKDIR}
 cd ${WORKDIR}
 
 get_device_boot() { # 未指定boot路径时从设备boot分区获取boot镜像
+	echo "${BLUE}I: Getting boot image...${RESET}"
+
 	if [[ -z "${BOOTPATH}" ]]; then
-		echo "${BLUE}I: Getting boot image...${RESET}"
 		echo "${BLUE}I: Current boot: ${BOOTSUFFIX}(If empty: A-Only devices)${RESET}"
 		dd if=/dev/block/by-name/boot${BOOTSUFFIX} of=${WORKDIR}/boot${BOOTSUFFIX}.img
 		EXITSTATUS=$?
