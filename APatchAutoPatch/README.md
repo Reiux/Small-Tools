@@ -12,6 +12,7 @@ This script will:
 ## TODO
 
 - [x] User-specified boot image path.
+    > Usage: ./AAP.sh {BOOT IMAGE PATH}
 
 ---
 
