@@ -37,7 +37,6 @@ SUPERKEY=${RANDOM}
 WORKDIR=/data/adb/nyatmp
 
 mkdir -p ${WORKDIR}
-cd ${WORKDIR}
 
 get_device_boot() { # 未指定boot路径时从设备boot分区获取boot镜像
 	echo "${BLUE}I: Getting boot image...${RESET}"
@@ -58,6 +57,7 @@ get_device_boot() { # 未指定boot路径时从设备boot分区获取boot镜像
 }
 
 get_tools() { # 从GitHub下载工具
+	cd ${WORKDIR}
 	echo "${BLUE}I: Downloading the latest kptools-android...${RESET}"
 	curl -LO "https://github.com/bmax121/KernelPatch/releases/latest/download/kptools-android"
 	EXITSTATUS=$?
