@@ -11,6 +11,10 @@ RESET="\E[0m"
 # 判断是否为安卓
 if [[ "$(uname -o)" != "Android" ]]; then
 	echo -e "${RED}E: RUN THIS SCRIPT IN ANDROID!${RESET}"
+	exit 1
+fi
+if [[ "$(id -u)" != "0" ]]; then
+	echo -e "${RED}E: RUN THIS SCRIPT WITH ROOT PERMISSION!${RESET}"
 	exit 2
 fi
 # 判断用户输入的boot镜像路径是否正确
