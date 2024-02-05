@@ -9,7 +9,7 @@ GREEN="\E[1;32m"
 RESET="\E[0m"
 
 # 判断是否为安卓
-if [[ "$(uname -o)" != "Android" ]]; then
+if [[ ! -e /vendor/build.prop ]]; then
 	echo -e "${RED}E: RUN THIS SCRIPT IN ANDROID!${RESET}"
 	exit 1
 fi
