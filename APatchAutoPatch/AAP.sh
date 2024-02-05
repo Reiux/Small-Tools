@@ -10,8 +10,9 @@ if [[ "$(uname -o)" != "Android" ]]; then
 	echo -e "${RED}E: RUN THIS SCRIPT IN ANDROID!${RESET}"
 	exit 2
 fi
-
-BOOTSUFFIX=$(getprop ro.boot.slot_suffix)
+if [[ ! -e /dev/block/by-name/boot ]]; then
+	BOOTSUFFIX=$(getprop ro.boot.slot_suffix)
+fi
 SUPERKEY=${RANDOM}
 WORKDIR=/data/adb/nyatmp
 
@@ -20,7 +21,7 @@ cd ${WORKDIR}
 
 get_boot() {
 	echo "I: While getting boot image..."
-	echo "I: Current boot slot: ${BOOTSUFFIX}"
+	echo "I: Current boot: ${BOOTSUFFIX}(If empty: A-Only devices)"
 	dd if=/dev/block/by-name/boot${BOOTSUFFIX} of=${WORKDIR}/boot${BOOTSUFFIX}.img
 	EXITSTATUS=$?
 	if [[ $EXITSTATUS != 0 ]]; then
