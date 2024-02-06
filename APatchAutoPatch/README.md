@@ -35,7 +35,7 @@ tsu
 ./AAP.sh 
 
 # Specify a boot **IMAGE** path (NOT BOOT PARTITION PATH)
-./AAP.sh /sdcard/Download/boot_a.img
+./AAP.sh -i /sdcard/Download/boot_a.img
 ```
 
 ---
@@ -46,6 +46,4 @@ tsu
 
 ---
 
-If you encounter any issues, please provide feedback to me:  
-
-[Telegram](https://t.me/nya_main)
+If you encounter any issues, please submit a issue on github or provide feedback to me:[Telegram](https://t.me/nya_main)
