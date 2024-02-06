@@ -2,21 +2,6 @@
 #by nya
 #2024-02-04
 
-# 判断用户输入的boot镜像路径是否正确
-if [[ -n ${1} ]]; then
-	BOOTPATH=$1
-	if [[ -e "${BOOTPATH}" ]]; then
-		echo -e "${BLUE}I: Boot image path specified. Current boot path: ${BOOTPATH}${RESET}"
-	else
-		echo -e "${RED}E: SPECIFIED BOOT IMAGE PATH IS WRONG! NO SUCH FILE!${RESET}"
-		exit 1
-	fi
-fi
-# 判断用户设备是否为ab分区，是则设置$BOOTSUFFIX
-if [[ ! -e /dev/block/by-name/boot ]]; then
-	BOOTSUFFIX=$(getprop ro.boot.slot_suffix)
-fi
-
 get_device_boot() { # 未指定boot路径时从设备boot分区获取boot镜像
 	echo "${BLUE}I: Getting boot image...${RESET}"
 
@@ -93,7 +78,7 @@ patch_boot() { # 修补boot镜像
 		echo -e "${RED}E: REPACK FAILED${RESET}"
 		exit 1
 	fi
-	echo "I: Done."
+	echo -e "${GREEN}I: Done.${RESET}"
 }
 
 flash_boot() { # 刷入boot镜像
