@@ -8,6 +8,8 @@ BLUE="\E[1;34m"
 GREEN="\E[1;32m"
 RESET="\E[0m"
 
+alias echo="echo -e"
+
 # 参数解析
 while getopts ":i:hvn" OPT; do
 	case $OPT in
@@ -15,7 +17,7 @@ while getopts ":i:hvn" OPT; do
 		BOOTPATH="${OPTARG}"
 		;;
 	h | v)
-		echo -e "${GREEN}"
+		echo "${GREEN}"
 		cat <<-EOF
 			APatch Auto Patch Tool
 			Written by nya
@@ -27,12 +29,12 @@ while getopts ":i:hvn" OPT; do
 			-i [BOOT IMAGE PATH],   dpecify a boot image path.
 			-n,                     do not install the patched boot image, save the image in /storage/emulated/0/patched_boot.img
 		EOF
-		echo -e "${RESET}"
+		echo "${RESET}"
 		exit 0
 		;;
 	n)
 		NOINSTALL=true
-		echo -e "${BLUE}I: The -n parameter was received. Won't install after patch.${RESET}"
+		echo "${BLUE}I: The -n parameter was received. Won't install after patch.${RESET}"
 		;;
 	:)
 		echo "${YELLOW}Option -$OPTARG requires an argument..${RESET}" >&2 && exit 1
@@ -44,22 +46,22 @@ while getopts ":i:hvn" OPT; do
 	esac
 done
 
-# Android 检测
-if [[ ! -e /vendor/build.prop ]]; then
-	echo -e "${RED}E: RUN THIS SCRIPT IN ANDROID/TERMUX!!${RESET}"
-	exit 1
-fi
 # ROOT 检测
 if [[ "$(id -u)" != "0" ]]; then
-	echo -e "${RED}E: RUN THIS SCRIPT WITH ROOT PERMISSION!${RESET}"
+	echo "${RED}E: RUN THIS SCRIPT WITH ROOT PERMISSION!${RESET}"
 	exit 2
+fi
+# Android 检测
+if [[ ! -e /vendor/build.prop ]]; then
+	echo "${RED}E: RUN THIS SCRIPT IN ANDROID/TERMUX!!${RESET}"
+	exit 1
 fi
 # 判断用户输入的boot镜像路径是否正确
 if [[ -n "${BOOTPATH}" ]]; then
 	if [[ -e "${BOOTPATH}" ]]; then
-		echo -e "${BLUE}I: Boot image path specified. Current boot path: ${BOOTPATH}${RESET}"
+		echo "${BLUE}I: Boot image path specified. Current boot path: ${BOOTPATH}${RESET}"
 	else
-		echo -e "${RED}E: SPECIFIED BOOT IMAGE PATH IS WRONG! NO SUCH FILE!${RESET}"
+		echo "${RED}E: SPECIFIED BOOT IMAGE PATH IS WRONG! NO SUCH FILE!${RESET}"
 		exit 1
 	fi
 fi
@@ -75,21 +77,25 @@ WORKDIR=/data/adb/nyatmp
 rm -rf ${WORKDIR}
 
 mkdir -p ${WORKDIR}
-echo -e "${BLUE}I: Downloading files from GitHub...${RESET}"
+echo "${BLUE}I: Downloading files from GitHub...${RESET}"
 curl -L --progress-bar "https://github.com/nya-main/Small-Tools/raw/main/APatchAutoPatch/AAPFunction" -o ${WORKDIR}/AAPFunction
 EXITSTATUS=$?
 if [[ $EXITSTATUS != 0 ]]; then
-	echo -e "${RED}E: SOMETHING WENT WRONG! CHECK YOUR INTERNET CONNECTION!${RESET}"
+	echo "${RED}E: SOMETHING WENT WRONG! CHECK YOUR INTERNET CONNECTION!${RESET}"
 	exit 1
 fi
 curl -L --progress-bar "https://github.com/nya-main/Small-Tools/raw/main/APatchAutoPatch/pv" -o ${WORKDIR}/pv
 EXITSTATUS=$?
 if [[ $EXITSTATUS != 0 ]]; then
-	echo -e "${RED}E: SOMETHING WENT WRONG! CHECK YOUR INTERNET CONNECTION!${RESET}"
+	echo "${RED}E: SOMETHING WENT WRONG! CHECK YOUR INTERNET CONNECTION!${RESET}"
 	exit 1
 else
-	echo -e "${GREEN}I: Done.${RESET}"
+	chmod +x ${WORKDIR}/pv
+	echo "${GREEN}I: Done.${RESET}"
 fi
+echo "${BLUE}I: Backing up boot image...${RESET}"
+dd if=/dev/block/by-name/boot${BOOTSUFFIX} of=/storage/emulated/0/stock_boot.img
+echo "${GREEN}I: Done. Boot image path: /storage/emulated/0/stock_boot.img${RESET}"
 
 # 加载操作文件
 source ${WORKDIR}/AAPFunction
@@ -98,8 +104,8 @@ get_device_boot
 get_tools
 patch_boot
 if ${NOINSTALL}; then
-	echo -e "${YELLOW}I: The -n parameter was received. Won't flash the boot partition.${RESET}"
-	echo -e "${BLUE}I: Now copying patched image to /storage/emulated/0/patch_boot.img...${RESET}"
+	echo "${YELLOW}I: The -n parameter was received. Won't flash the boot partition.${RESET}"
+	echo "${BLUE}I: Now copying patched image to /storage/emulated/0/patch_boot.img...${RESET}"
 	./pv ${WORKDIR}/new-boot.img >/storage/emulated/0/patched_boot.img
 	rm -rf ${WORKDIR}
 	echo "${GREEN}I: Done.${RESET}"
