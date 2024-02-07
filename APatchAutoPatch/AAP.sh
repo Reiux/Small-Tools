@@ -9,23 +9,29 @@ GREEN="\E[1;32m"
 RESET="\E[0m"
 
 # 参数解析
-while getopts ":i:hv" OPT; do
+while getopts ":i:hvn" OPT; do
 	case $OPT in
 	i) # 处理选项i
 		BOOTPATH="${OPTARG}"
 		;;
-	h)
-		echo -e "${GREEN}See here:https://github.com/nya-main/Small-Tools/tree/main/APatchAutoPatch${RESET}"
-		exit 0
-		;;
-	v)
+	h | v)
 		echo -e "${GREEN}"
 		cat <<-EOF
-			        APatch Auto Patch Tool
-			        Written by nya
-			        Version: 0.0.1
+			APatch Auto Patch Tool
+			Written by nya
+			        Version: 0.1.0
+
+			-h, -v,                 print the usage and version
+
+			-i [BOOT IMAGE PATH],   dpecify a boot image path.
+			-n,                     do not install the patched boot image, save the image in ${WORKDIR}
 		EOF
+		echo -e "${RESET}"
 		exit 0
+		;;
+	n)
+		NOINSTALL=true
+		echo -e "${BLUE}I: The -n parameter was received. Won't install after patch.${RESET}"
 		;;
 	:)
 		echo "${YELLOW}Option -$OPTARG requires an argument..${RESET}" >&2 && exit 1
@@ -68,8 +74,14 @@ WORKDIR=/data/adb/nyatmp
 rm -rf ${WORKDIR}
 
 mkdir -p ${WORKDIR}
-echo -e "${BLUE}I: Loading files...${RESET}"
+echo -e "${BLUE}I: Downloading files from GitHub...${RESET}"
 curl -L --progress-bar "https://github.com/nya-main/Small-Tools/raw/main/APatchAutoPatch/AAPFunction" -o ${WORKDIR}/AAPFunction
+EXITSTATUS=$?
+if [[ $EXITSTATUS != 0 ]]; then
+	echo -e "${RED}E: SOMETHING WENT WRONG! CHECK YOUR INTERNET CONNECTION!${RESET}"
+	exit 1
+fi
+curl -L --progress-bar "https://github.com/nya-main/Small-Tools/raw/main/APatchAutoPatch/pv" -o ${WORKDIR}/pv
 EXITSTATUS=$?
 if [[ $EXITSTATUS != 0 ]]; then
 	echo -e "${RED}E: SOMETHING WENT WRONG! CHECK YOUR INTERNET CONNECTION!${RESET}"
@@ -84,4 +96,12 @@ source ${WORKDIR}/AAPFunction
 get_device_boot
 get_tools
 patch_boot
-flash_boot
+if ${NOINSTALL}; then
+	echo -e "${YELLOW}I: The -n parameter was received. Won't flash the boot partition.${RESET}"
+	echo -e "${BLUE}I: Now copying patched image to /storage/emulated/0/patch_boot.img...${RESET}"
+	./pv ${WORKDIR}/new-boot.img >/storage/emulated/0/patched_boot.img
+	echo "${GREEN}I: Done.${RESET}"
+	exit 0
+else
+	flash_boot
+fi
