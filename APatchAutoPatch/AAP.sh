@@ -19,12 +19,13 @@ while getopts ":i:hvn" OPT; do
 		cat <<-EOF
 			APatch Auto Patch Tool
 			Written by nya
-			        Version: 0.1.0
+			Version: 0.1.0
+			Current WORKDIR: ${WORKDIR}
 
 			-h, -v,                 print the usage and version
 
 			-i [BOOT IMAGE PATH],   dpecify a boot image path.
-			-n,                     do not install the patched boot image, save the image in ${WORKDIR}
+			-n,                     do not install the patched boot image, save the image in /storage/emulated/0/patched_boot.img
 		EOF
 		echo -e "${RESET}"
 		exit 0
@@ -100,6 +101,7 @@ if ${NOINSTALL}; then
 	echo -e "${YELLOW}I: The -n parameter was received. Won't flash the boot partition.${RESET}"
 	echo -e "${BLUE}I: Now copying patched image to /storage/emulated/0/patch_boot.img...${RESET}"
 	./pv ${WORKDIR}/new-boot.img >/storage/emulated/0/patched_boot.img
+	rm -rf ${WORKDIR}
 	echo "${GREEN}I: Done.${RESET}"
 	exit 0
 else

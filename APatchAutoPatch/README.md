@@ -25,6 +25,19 @@ chmod +x AAP.sh
 
 - Run
 
+Usage:
+```bash
+APatch Auto Patch Tool
+Written by nya
+Version: 0.1.0
+Current WORKDIR: ${WORKDIR}
+
+-h, -v,                 print the usage and version.
+
+-i [BOOT IMAGE PATH],   dpecify a boot image path.
+-n,                     do not install the patched boot image, save the image in /storage/emulated/0/patched_boot.img.
+```
+
 Example:
 
 ```bash
