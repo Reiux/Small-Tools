@@ -26,7 +26,7 @@ chmod +x AAP.sh
 - Run
 
 Usage:
-```bash
+```
 APatch Auto Patch Tool
 Written by nya
 Version: 0.1.0
