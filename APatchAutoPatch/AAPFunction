@@ -12,7 +12,6 @@ get_device_boot() { # 未指定boot路径时从设备boot分区获取boot镜像
 		EXITSTATUS=$?
 		if [[ $EXITSTATUS != 0 ]]; then
 			echo "${RED}E: GET BOOT IMAGE FAILED${RESET}"
-			echo "Maybe the boot path I prepared in advance is wrong. "
 			exit 1
 		fi
 	else

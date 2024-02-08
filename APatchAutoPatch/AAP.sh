@@ -57,7 +57,7 @@ if [[ "$(id -u)" != "0" ]]; then
 	exit 2
 fi
 # Android 检测
-if [[ ! -e /vendor/build.prop ]]; then
+if ! (command -v getprop >/dev/null 2>&1); then
 	echo "${RED}E: RUN THIS SCRIPT IN ANDROID/TERMUX!!${RESET}"
 	exit 1
 fi
@@ -102,7 +102,13 @@ else
 fi
 echo "${BLUE}I: Backing up boot image...${RESET}"
 dd if=/dev/block/by-name/boot${BOOTSUFFIX} of=/storage/emulated/0/stock_boot.img
-echo "${GREEN}I: Done. Boot image path: /storage/emulated/0/stock_boot.img${RESET}"
+EXITSTATUS=$?
+if [[ "${EXITSTATUS}" != "0" ]]; then
+	echo "${RED}E: BOOT IMAGE BACKUP FAILED!${RESET}"
+	echo "${YELLOW}W: Now skiping backingup boot image...${RESET}"
+else
+	echo "${GREEN}I: Done. Boot image path: /storage/emulated/0/stock_boot.img${RESET}"
+fi
 
 # 加载操作文件
 source ${WORKDIR}/AAPFunction
