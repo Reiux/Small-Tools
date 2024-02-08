@@ -63,19 +63,18 @@ patch_boot() { # 修补boot镜像
 	fi
 	echo "${GREEN}I: Done.${RESET}"
 	echo "${BLUE}I: Patching image...Current Superkey: ${SUPERKEY}${RESET}"
-	./kptools-android -p -k kpimg-android -s ${SUPERKEY} -i kernel -o patchedkernel
+	./kptools-android -p -k kpimg-android -s ${SUPERKEY} -i kernel -o kernel
 	EXITSTATUS=$?
 	if [[ ${EXITSTATUS} != 0 ]]; then
-		echo "${RED}E: PATCH FAILED${RESET}"
+		echo "${RED}E: PATCH FAILED!${RESET}"
 		exit 1
 	fi
 	echo "${GREEN}I: Done${RESET}"
 	echo "${BLUE}I: Repacking...${RESET}"
-	rm kernel
-	mv patchedkernel kernel || EXITSTATUS=1
-	./magiskboot repack boot${BOOTSUFFIX}.img || EXITSTATUS=1
+	./magiskboot repack boot${BOOTSUFFIX}.img
+	EXITSTATUS=1
 	if [[ $EXITSTATUS != 0 ]]; then
-		echo "${RED}E: REPACK FAILED${RESET}"
+		echo "${RED}E: REPACK FAILED!${RESET}"
 		exit 1
 	fi
 	echo "${GREEN}I: Done.${RESET}"
