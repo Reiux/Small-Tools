@@ -29,13 +29,14 @@ Usage:
 ```
 APatch Auto Patch Tool
 Written by nya
-Version: 0.1.0
+Version: 0.1.1
 Current WORKDIR: ${WORKDIR}
 
 -h, -v,                 print the usage and version.
 
 -i [BOOT IMAGE PATH],   dpecify a boot image path.
 -n,                     do not install the patched boot image, save the image in /storage/emulated/0/patched_boot.img.
+-s "STRING",            specify a superkey. Use STRING as superkey.
 ```
 
 Example:

@@ -11,7 +11,7 @@ RESET="\E[0m"
 alias echo="echo -e"
 
 # 参数解析
-while getopts ":i:hvn" OPT; do
+while getopts ":i:hvns:" OPT; do
 	case $OPT in
 	i) # 处理选项i
 		BOOTPATH="${OPTARG}"
@@ -21,13 +21,14 @@ while getopts ":i:hvn" OPT; do
 		cat <<-EOF
 			APatch Auto Patch Tool
 			Written by nya
-			Version: 0.1.0
+			Version: 0.1.1
 			Current WORKDIR: ${WORKDIR}
 
-			-h, -v,                 print the usage and version
+			-h, -v,                 print the usage and version.
 
-			-i [BOOT IMAGE PATH],   dpecify a boot image path.
-			-n,                     do not install the patched boot image, save the image in /storage/emulated/0/patched_boot.img
+			-i [BOOT IMAGE PATH],   specify a boot image path.
+			-n,                     do not install the patched boot image, save the image in /storage/emulated/0/patched_boot.img.
+			-s "STRING",            specify a superkey. Use STRING as superkey.
 		EOF
 		echo "${RESET}"
 		exit 0
@@ -36,12 +37,16 @@ while getopts ":i:hvn" OPT; do
 		NOINSTALL=true
 		echo "${BLUE}I: The -n parameter was received. Won't install after patch.${RESET}"
 		;;
+	s)
+		SUPERKEY="${OPTARG}"
+		echo "${BLUE}I: The -s parameter was received. Currently specified SuperKey: ${SUPERKEY}${RESET}"
+		;;
 	:)
-		echo "${YELLOW}Option -$OPTARG requires an argument..${RESET}" >&2 && exit 1
+		echo "${YELLOW}W: Option -$OPTARG requires an argument..${RESET}" >&2 && exit 1
 		;;
 
 	?)
-		echo "${RED}Invalid option: -$OPTARG${RESET}" >&2 && exit 1
+		echo "${RED}E: Invalid option: -$OPTARG${RESET}" >&2 && exit 1
 		;;
 	esac
 done
@@ -69,8 +74,10 @@ fi
 if [[ ! -e /dev/block/by-name/boot ]]; then
 	BOOTSUFFIX=$(getprop ro.boot.slot_suffix)
 fi
+if [[ -z "${SUPERKEY}" ]]; then
+	SUPERKEY=${RANDOM}
+fi
 
-SUPERKEY=${RANDOM}
 WORKDIR=/data/adb/nyatmp
 
 # 清理可能存在的上次运行文件
@@ -104,7 +111,7 @@ get_device_boot
 get_tools
 patch_boot
 if ${NOINSTALL}; then
-	echo "${YELLOW}I: The -n parameter was received. Won't flash the boot partition.${RESET}"
+	echo "${YELLOW}W: The -n parameter was received. Won't flash the boot partition.${RESET}"
 	echo "${BLUE}I: Now copying patched image to /storage/emulated/0/patch_boot.img...${RESET}"
 	./pv ${WORKDIR}/new-boot.img >/storage/emulated/0/patched_boot.img
 	rm -rf ${WORKDIR}
