@@ -23,7 +23,7 @@ get_device_boot() { # 未指定boot路径时从设备boot分区获取boot镜像
 get_tools() { # 从GitHub下载工具
 	cd ${WORKDIR}
 	echo "${BLUE}I: Downloading the latest kptools-android...${RESET}"
-	curl -LO --progress-bar "https://github.com/bmax121/KernelPatch/releases/latest/download/kptools-android"
+	curl -LO --progress-bar "https://github.com/bmax121/KernelPatch/releases/download/0.9.1-dev/kptools-android"
 	EXITSTATUS=$?
 	if [[ $EXITSTATUS != 0 ]]; then
 		echo "${RED}E: DOWNLOAD FAILED${RESET}"
@@ -33,7 +33,7 @@ get_tools() { # 从GitHub下载工具
 	chmod +x kptools-android
 	echo "${GREEN}I: Done.${RESET}"
 	echo "${BLUE}I: Downloading the latest kpimg-android...${RESET}"
-	curl -LO --progress-bar "https://github.com/bmax121/KernelPatch/releases/latest/download/kpimg-android"
+	curl -LO --progress-bar "https://github.com/bmax121/KernelPatch/releases/download/0.9.1-dev/kpimg-android"
 	EXITSTATUS=$?
 	if [[ $EXITSTATUS != 0 ]]; then
 		echo "${RED}E: DOWNLOAD FAILED${RESET}"
