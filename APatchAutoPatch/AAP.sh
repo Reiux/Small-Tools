@@ -85,13 +85,13 @@ rm -rf ${WORKDIR}
 
 mkdir -p ${WORKDIR}
 echo "${BLUE}I: Downloading files from GitHub...${RESET}"
-curl -L --progress-bar "https://github.com/nya-main/Small-Tools/raw/main/APatchAutoPatch/AAPFunction" -o ${WORKDIR}/AAPFunction
+curl -L --progress-bar "https://github.com/Reiux/Small-Tools/raw/main/APatchAutoPatch/AAPFunction" -o ${WORKDIR}/AAPFunction
 EXITSTATUS=$?
 if [[ $EXITSTATUS != 0 ]]; then
 	echo "${RED}E: SOMETHING WENT WRONG! CHECK YOUR INTERNET CONNECTION!${RESET}"
 	exit 1
 fi
-curl -L --progress-bar "https://github.com/nya-main/Small-Tools/raw/main/APatchAutoPatch/pv" -o ${WORKDIR}/pv
+curl -L --progress-bar "https://github.com/Reiux/Small-Tools/raw/main/APatchAutoPatch/pv" -o ${WORKDIR}/pv
 EXITSTATUS=$?
 if [[ $EXITSTATUS != 0 ]]; then
 	echo "${RED}E: SOMETHING WENT WRONG! CHECK YOUR INTERNET CONNECTION!${RESET}"
